@@ -26,8 +26,8 @@ export default function GainLoss({ base, quote }) {
       loading={loading}
       action={<Tabs options={RANGES} value={range} onChange={setRange} label="Gain/loss period" />}
     >
-      <label className="mb-3 flex items-center gap-2 text-xs text-ink-3">
-        If I hold
+      <label className="mb-3 flex flex-wrap items-center gap-2 text-xs text-ink-3">
+        <span className="whitespace-nowrap">If I hold</span>
         <input
           type="number" min="0" value={amount} onChange={(e) => setAmount(e.target.value)}
           className="w-28 rounded-lg border border-line bg-surface px-2 py-1.5 text-sm font-medium text-ink"

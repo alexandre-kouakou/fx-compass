@@ -3,7 +3,7 @@
 export function Card({ title, insight, loading, error, children, action, className = '' }) {
   return (
     <section className={`rounded-2xl border border-line bg-surface p-4 sm:p-5 ${className}`}>
-      <header className="mb-3 flex items-start justify-between gap-3">
+      <header className="mb-3 flex flex-wrap items-center justify-between gap-2">
         <h2 className="text-xs font-semibold uppercase tracking-wide text-ink-3">{title}</h2>
         {action}
       </header>
@@ -86,7 +86,7 @@ const STATUS = {
 export function StatusPill({ status, children }) {
   const s = STATUS[status]
   return (
-    <span className="inline-flex items-center gap-1.5 rounded-full border border-line px-2.5 py-1 text-xs font-medium text-ink">
+    <span className="inline-flex items-center gap-1.5 whitespace-nowrap rounded-full border border-line px-2.5 py-1 text-xs font-medium text-ink">
       <span aria-hidden style={{ color: s.color }}>{s.icon}</span>
       {children}
     </span>
