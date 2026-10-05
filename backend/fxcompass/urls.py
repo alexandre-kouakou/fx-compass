@@ -1,22 +1,22 @@
-"""
-URL configuration for fxcompass project.
-
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/6.1/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
-"""
 from django.contrib import admin
 from django.urls import path
 
+from alerts import views as alerts
+from analytics import views as analytics
+from forecasting import views as forecasting
+from rates import views as rates
+
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path("admin/", admin.site.urls),
+    path("api/currencies", rates.currencies),
+    path("api/status", rates.status),
+    path("api/rates/latest", analytics.latest),
+    path("api/convert", analytics.convert),
+    path("api/history", analytics.history),
+    path("api/gain-loss", analytics.gain_loss),
+    path("api/volatility", analytics.volatility),
+    path("api/heatmap", analytics.heatmap),
+    path("api/forecast", forecasting.forecast),
+    path("api/alerts", alerts.alert_list),
+    path("api/alerts/<int:pk>", alerts.alert_detail),
 ]

@@ -1,3 +1,6 @@
 from django.contrib import admin
 
-# Register your models here.
+from .models import Forecast, ModelMetric
+
+admin.site.register(Forecast)
+admin.site.register(ModelMetric)

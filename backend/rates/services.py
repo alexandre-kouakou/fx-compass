@@ -54,13 +54,19 @@ def update_from_ecb(start: date) -> FetchLog:
 
 
 def update_aed_live() -> FetchLog:
-    """Overwrite AED on the latest stored date with the live open.er-api.com value."""
-    latest = Rate.objects.filter(currency_id="EUR").order_by("-date").values_list("date", flat=True).first()
-    if latest is None:
+    """Overwrite AED on the latest stored date with the live open.er-api.com value.
+
+    We take AED-per-USD from open.er-api and multiply by the ECB's USD-per-EUR for the
+    same day, so AED stays consistent with the ECB numbers (no fake jumps from mixing
+    two providers' EUR/USD).
+    """
+    usd = Rate.objects.filter(currency_id="USD").order_by("-date").first()
+    if usd is None:
         return FetchLog.objects.create(source="er_api", ok=False, message="no ECB data yet")
+    latest = usd.date
     try:
-        aed_per_eur, updated = sources.fetch_aed_live()
-        _upsert(latest, "AED", aed_per_eur, Rate.SOURCE_ER_API)
+        aed_per_usd, updated = sources.fetch_aed_live()
+        _upsert(latest, "AED", aed_per_usd * float(usd.per_eur), Rate.SOURCE_ER_API)
         return FetchLog.objects.create(
             source="er_api", ok=True, rows=1, latest_date=latest,
             message=f"provider updated {updated.isoformat()}",

@@ -27,7 +27,7 @@ def fetch_frankfurter(start: date, end: date | None = None) -> dict[date, dict[s
 
 
 def fetch_aed_live() -> tuple[float, datetime]:
-    """Latest AED per EUR from open.er-api.com (free, no key, updated daily)."""
+    """Latest AED per USD from open.er-api.com (free, no key, updated daily)."""
     resp = requests.get(settings.AED_LIVE_URL, timeout=settings.HTTP_TIMEOUT_SECONDS)
     resp.raise_for_status()
     data = resp.json()

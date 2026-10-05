@@ -109,7 +109,7 @@ REST_FRAMEWORK = {
 
 # --- FX Compass data settings ---
 FRANKFURTER_URL = os.getenv("FRANKFURTER_URL", "https://api.frankfurter.dev/v1")
-AED_LIVE_URL = os.getenv("AED_LIVE_URL", "https://open.er-api.com/v6/latest/EUR")
+AED_LIVE_URL = os.getenv("AED_LIVE_URL", "https://open.er-api.com/v6/latest/USD")
 AED_USD_PEG = 3.6725
 HISTORY_START = os.getenv("HISTORY_START", "2018-01-01")
 # How old the last successful fetch may be before an API request triggers a refresh.
