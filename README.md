@@ -26,7 +26,7 @@ Currencies: USD, EUR, GBP, JPY, INR, AED, CHF, CNY, AUD, CAD.
 - **Daily reference rates**, not live ticks: European Central Bank rates via [Frankfurter](https://frankfurter.dev), published ~16:00 CET on ECB working days. Weekends/holidays have no data.
 - **AED is not published by the ECB.** History is *derived* from the USD peg (1 USD = 3.6725 AED) and labelled "derived"; the latest value comes from [Rates By Exchange Rate API](https://www.exchangerate-api.com).
 - All data is cached in our database, so the dashboard keeps working if the sources are down (it tells you how old the data is).
-- **AI forecast:** Ridge regression on recent daily returns, trained with a time-based split (no shuffling). On data up to 2 Oct 2026 it beat the naive baseline on **18 of 90** currency pairs and roughly tied on the rest, which is what finance theory predicts for exchange rates (close to a random walk). The dashboard says this openly for each pair. Educational only, not financial advice.
+- **AI forecast:** Ridge regression on recent daily returns, trained with a time-based split (no shuffling). On data up to 2 Oct 2026 it beat the naive baseline by more than 1% on **18 of 90** currency pairs, was within ±1% on 30, was more than 1% worse on 40, and had nothing to forecast on the 2 pegged USD/AED pairs. That is what finance theory predicts for exchange rates (close to a random walk). The dashboard says this openly for each pair. Educational only, not financial advice.
 
 ## Tech stack
 

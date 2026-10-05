@@ -29,7 +29,7 @@ Technical choices, newest at the bottom. Format: date — decision — why — a
 - **Features (day t only, no look-ahead):** last 5 daily log-returns, 5/20-day mean return, 20-day volatility, distance from 20-day average. **Target:** log change from t to t+h, one model per h = 1..7.
 - **Split:** last 5 years only; most recent 20% = test, never shuffled, 7-day gap so no training target overlaps the test period. Final forecast uses a model refit on all data.
 - **Honesty:** metrics = MAE/RMSE in % of rate on the test period, vs baseline "rate stays the same". Verdict `beats_baseline` only if average MAE is >1% better; pegged pairs get `pegged`. Error range = 10th–90th percentile of test errors (an "80% range").
-- **Result on 2026-10-02 data:** beats the baseline on 18/90 pairs, roughly ties elsewhere — consistent with FX being close to a random walk.
+- **Result on 2026-10-02 data:** beats the baseline by >1% on 18/90 pairs, within ±1% on 30, worse by >1% on 40, 2 pegged (USD/AED both ways) — consistent with FX being close to a random walk.
 - **Alternatives:** ARIMA/Prophet/LSTM (slower, more fragile, unlikely to beat the baseline on daily FX either).
 - **Note:** forecast dates are Mon–Fri business days; ECB holidays are not excluded.
 
