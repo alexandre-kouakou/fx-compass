@@ -34,15 +34,42 @@ React (Vite) + Tailwind CSS + Chart.js · Django + Django REST Framework · SQLi
 
 ## How to run
 
-See the **How to run** section in [CLAUDE.md](CLAUDE.md#how-to-run). Short version:
+Prerequisites: Python 3.12+ (tested on 3.14), Node 20+ (tested on 22).
 
 ```bash
-cp .env.example .env
-cd backend && python3 -m venv .venv && .venv/bin/pip install -r requirements.txt
-.venv/bin/python manage.py migrate && .venv/bin/python manage.py backfill_history
-.venv/bin/python manage.py runserver          # terminal 1
-cd ../frontend && npm install && npm run dev   # terminal 2 → http://localhost:5173
+# 0. config (once)
+cp .env.example .env          # then set DJANGO_SECRET_KEY to any long random string
+
+# 1. backend (once)
+cd backend
+python3 -m venv .venv
+.venv/bin/pip install -r requirements.txt
+.venv/bin/python manage.py migrate
+.venv/bin/python manage.py backfill_history    # downloads ~8 years of daily rates (~10s)
+.venv/bin/python manage.py train_forecasts     # optional: pre-trains all 90 pairs (~10s)
+
+# 2. backend (every time)
+.venv/bin/python manage.py runserver           # API on http://localhost:8000/api/
+
+# tests (offline, no network)
+.venv/bin/python manage.py test
 ```
+
+Useful commands: `fetch_rates` (pull new days + live AED; also happens automatically every 6h when the dashboard is opened).
+
+API endpoints (all GET unless noted): `/api/status`, `/api/currencies`, `/api/rates/latest?base=`, `/api/convert?base=&quote=&amount=`, `/api/history?base=&quote=&range=1W|1M|3M|6M|1Y|5Y`, `/api/gain-loss?base=&quote=&amount=&range=`, `/api/volatility?base=&quote=`, `/api/heatmap?range=`, `/api/forecast?base=&quote=`, `/api/alerts?client_id=` (GET, POST), `/api/alerts/<id>?client_id=` (DELETE).
+
+```bash
+# 3. frontend (once), in a second terminal
+cd frontend
+npm install
+
+# 4. frontend (every time, with the backend running)
+npm run dev                                    # dashboard on http://localhost:5173
+npm run build                                  # production build into frontend/dist
+```
+
+The frontend reads `VITE_API_URL` from the root `.env` (default `http://localhost:8000/api`).
 
 Technical decisions are logged in [DECISIONS.md](DECISIONS.md).
 
