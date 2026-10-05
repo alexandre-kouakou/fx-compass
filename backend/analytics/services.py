@@ -99,8 +99,8 @@ def gain_loss(base: str, quote: str, amount: float, range_key: str) -> dict:
     word = "gained" if total >= 0 else "lost"
     insight = (
         f"{amount:,.0f} {base} held over {text.period(range_key)} {word} {text.fmt_money(abs(total), quote)}"
-        f" ({text.fmt_pct(pct)}). Best day {_d(best)}: {text.fmt_money(daily[best], quote)};"
-        f" worst day {_d(worst)}: {text.fmt_money(daily[worst], quote)}."
+        f" ({text.fmt_pct(pct)}). Best day {best:%-d %b}: {text.fmt_money(daily[best], quote)};"
+        f" worst day {worst:%-d %b}: {text.fmt_money(daily[worst], quote)}."
     )
     return {
         "base": base, "quote": quote, "amount": amount, "range": range_key,

@@ -44,7 +44,7 @@ def store_ecb_days(days: dict[date, dict[str, float]]) -> int:
 
 def update_from_ecb(start: date) -> FetchLog:
     try:
-        days = sources.fetch_frankfurter(start)
+        days = sources.fetch_frankfurter(start, timezone.now().date())
         n = store_ecb_days(days)
         latest = max(days) if days else None
         return FetchLog.objects.create(source="ecb", ok=True, rows=n, latest_date=latest)
@@ -83,18 +83,19 @@ def refresh(full: bool = False):
     if full or last is None:
         start = date.fromisoformat(settings.HISTORY_START)
     else:
-        start = last + timedelta(days=1)
-    ecb_log = None
-    if start <= timezone.now().date():
-        ecb_log = update_from_ecb(start)
+        # Re-fetch the last stored day too: Frankfurter answers ranges that start on a
+        # weekend/holiday very slowly (~13s, seen 2026-10-05), and overlap is harmless.
+        start = last
+    ecb_log = update_from_ecb(start)
     aed_log = update_aed_live()
     return ecb_log, aed_log
 
 
 def refresh_if_stale():
-    """Called by API requests: refresh at most every REFRESH_AFTER_HOURS, never raise."""
+    """Called by API requests: refresh at most every REFRESH_AFTER_HOURS (15 min after a failure), never raise."""
     last_try = FetchLog.objects.filter(source="ecb").first()
-    cutoff = timezone.now() - timedelta(hours=settings.REFRESH_AFTER_HOURS)
+    wait = timedelta(hours=settings.REFRESH_AFTER_HOURS) if last_try is None or last_try.ok else timedelta(minutes=15)
+    cutoff = timezone.now() - wait
     if last_try is None or last_try.created_at < cutoff:
         try:
             refresh()
