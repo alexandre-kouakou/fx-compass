@@ -41,3 +41,9 @@ Technical choices, newest at the bottom. Format: date — decision — why — a
 
 ## 2026-10-05 — Insights generated server-side
 - **Why:** one source of truth for the numbers and the sentence that explains them; frontend just displays `insight`.
+
+## 2026-10-05 — Frankfurter requests always carry an explicit end date and overlap one day
+- **Why:** an open-ended range starting on a weekend (`/2026-10-03..`) took ~13s and timed out; with an explicit end date and starting from the last stored day it takes <1s. Re-storing the overlapping day is harmless (upsert). After a failed fetch we retry after 15 min instead of 6h.
+
+## 2026-10-05 — Frontend: category x-axis (no time adapter), colours from the validated reference palette
+- **Why:** a category axis skips weekends naturally (no fake flat lines) and needs no date-adapter dependency. Blue = up/actual, red = down, orange = forecast, grey dashed = naive baseline; status colours always come with an icon + label. Light and dark mode follow the OS setting.

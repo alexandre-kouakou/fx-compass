@@ -78,7 +78,7 @@ Stretch only (do not start until everything above works): news sentiment.
 - Tests: Django `TestCase` for API endpoints and the ML split; keep them fast and offline (no real network calls in tests).
 - Money/rates: store as `Decimal` in the DB, round only for display.
 
-## Folder structure (planned)
+## Folder structure
 
 ```
 fx-compass/
@@ -127,7 +127,17 @@ Useful commands: `fetch_rates` (pull new days + live AED; also happens automatic
 
 API endpoints (all GET unless noted): `/api/status`, `/api/currencies`, `/api/rates/latest?base=`, `/api/convert?base=&quote=&amount=`, `/api/history?base=&quote=&range=1W|1M|3M|6M|1Y|5Y`, `/api/gain-loss?base=&quote=&amount=&range=`, `/api/volatility?base=&quote=`, `/api/heatmap?range=`, `/api/forecast?base=&quote=`, `/api/alerts?client_id=` (GET, POST), `/api/alerts/<id>?client_id=` (DELETE).
 
-Frontend: _coming next._
+```bash
+# 3. frontend (once)
+cd frontend
+npm install
+
+# 4. frontend (every time, with the backend running)
+npm run dev                                    # dashboard on http://localhost:5173
+npm run build                                  # production build into frontend/dist
+```
+
+The frontend reads `VITE_API_URL` from the root `.env` (default `http://localhost:8000/api`).
 
 ## Team
 
